@@ -7,13 +7,13 @@ import {PrimeNGConfig} from 'primeng/api';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
-    menuMode = 'horizontal';
+    menuMode = 'sidebar';
 
-    darkMode = 'light';
+    darkMode = 'dark';
 
-    topbarTheme = 'light';
+    topbarTheme = 'dark';
 
-    menuTheme = 'light';
+    menuTheme = 'dark';
 
     inputStyle = 'outlined';
 
@@ -23,8 +23,8 @@ export class AppComponent implements OnInit{
 
     ngOnInit() {
         this.primengConfig.ripple = true;
-        this.darkMode = 'light';
-        this.topbarTheme = 'light';
-        this.menuTheme = 'light';
+        this.darkMode = 'dark';
+        this.topbarTheme = 'dark';
+        this.menuTheme = 'dark';
     }
 }
