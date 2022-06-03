@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  repuestosAPI:'localhost:3000/api/'
+  repuestosAPI:'http://localhost:3000/api/'
 };
