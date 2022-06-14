@@ -71,27 +71,70 @@ export class UsersComponent implements OnInit {
   saveNewUser(){
     this.upperCaseNewUser();
     this.submitted = true;
-    this._userService.post('POST_USERS',this.newUserAux).toPromise()
-    .then((r:any)=>{
 
-      if(r.ok){
+    if(this.validatenNewUserForm()){
 
-        this.getUsers();
-        this.closeDialogNewUser();
-        this.messageService.add({ key: 'tst', severity: 'success', summary: '¡Aviso!', detail: 'Se guardo el usuario correctamente' });
+      this._userService.post('POST_USERS',this.newUserAux).toPromise()
+      .then((r:any)=>{
+  
+        if(r.ok){
+  
+          this.getUsers();
+          this.closeDialogNewUser();
+          this.messageService.add({ key: 'tst', severity: 'success', summary: '¡Aviso!', detail: 'Se guardo el usuario correctamente' });
+  
+        }else{
 
-      }else{
+          console.log(r.error);
+  
+          if(r.error === "duplicated user" ){
 
-        console.log(r.error);
+            this.messageService.add({ key: 'tst', severity: 'warn', summary: '¡Advertencia!', detail: 'Usuario ya existe.' });
+
+          }else{
+
+            this.messageService.add({ key: 'tst', severity: 'error', summary: '¡Error!', detail: 'Se genero un error al guardar el nuevo usuario' });
+
+          }
+
+       }
+        
+      }).catch((err)=>{
+  
+        console.log(err);
         this.messageService.add({ key: 'tst', severity: 'error', summary: '¡Error!', detail: 'Se genero un error al guardar el nuevo usuario' });
-     }
-      
-    }).catch((err)=>{
+  
+      });
 
-      console.log(err);
-      this.messageService.add({ key: 'tst', severity: 'error', summary: '¡Error!', detail: 'Se genero un error al guardar el nuevo usuario' });
+    }
 
-    });
+
+
+  }
+
+  validatenNewUserForm(){
+
+    if(this.newUserAux.run == null || this.newUserAux.run == '' || this.newUserAux.run == undefined){
+
+      return false;
+
+    }else if(this.newUserAux.nombres == null || this.newUserAux.nombres == '' || this.newUserAux.nombres == undefined){
+
+      return false;
+
+    }else if(this.newUserAux.ape_pater == null || this.newUserAux.ape_pater == '' || this.newUserAux.ape_pater == undefined){
+
+      return false;
+
+    }else if(this.newUserAux.ape_mater == null || this.newUserAux.ape_mater == '' || this.newUserAux.ape_mater == undefined){
+
+      return false;
+    
+    }else{
+
+      return true;
+
+    }
 
   }
 
