@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {ProductService} from '../../demo/service/productservice'; // SE DEBE CAMBIAR POR EL SERVICIO QUE LE PEGUE A LA API
-import {Product} from '../../demo/domain/product'; // SE DEBE CAMBIAR POR EL ESQUEMA DE USUARIO
-import {ConfirmationService, MessageService, Message} from 'primeng/api';
+import { Users } from '../../models/users';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { UsersService } from '../../services/users.service';
 @Component({
   selector: 'app-users',
@@ -13,20 +12,14 @@ export class UsersComponent implements OnInit {
 
   constructor(
     private _userService: UsersService,
-    private productService: ProductService, 
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private messageService: MessageService
   ) { }
 
-  productDialog: boolean;
-  products: Product[];
-  product: Product;
-  selectedProducts: Product[];
-  submitted: boolean;
   columns: any[];
-
-  users:any[];
-
+  insertUserDialog:boolean = false;
+  submitted:boolean = false;
+  users:Users[];
+  newUserAux = new Users;
 
   async ngOnInit() {
 
@@ -42,7 +35,7 @@ export class UsersComponent implements OnInit {
   }
 
   async getUsers(){
-    this._userService.get('GET_ALL_USERS').toPromise()
+    this._userService.get('GET_USERS').toPromise()
     .then((r)=>{
 
         if(r.ok){
@@ -64,5 +57,51 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  openDialogNewUser(){
+    this.newUserAux = new Users();
+    this.insertUserDialog = true;
+  }
+
+  closeDialogNewUser(){
+    this.newUserAux = new Users();
+    this.insertUserDialog = false;
+    this.submitted = false;
+  }
+
+  saveNewUser(){
+    this.upperCaseNewUser();
+    this.submitted = true;
+    this._userService.post('POST_USERS',this.newUserAux).toPromise()
+    .then((r:any)=>{
+
+      if(r.ok){
+
+        this.getUsers();
+        this.closeDialogNewUser();
+        this.messageService.add({ key: 'tst', severity: 'success', summary: '¡Aviso!', detail: 'Se guardo el usuario correctamente' });
+
+      }else{
+
+        console.log(r.error);
+        this.messageService.add({ key: 'tst', severity: 'error', summary: '¡Error!', detail: 'Se genero un error al guardar el nuevo usuario' });
+     }
+      
+    }).catch((err)=>{
+
+      console.log(err);
+      this.messageService.add({ key: 'tst', severity: 'error', summary: '¡Error!', detail: 'Se genero un error al guardar el nuevo usuario' });
+
+    });
+
+  }
+
+  upperCaseNewUser(){
+    
+    this.newUserAux.nombres = (this.newUserAux.nombres != null ? this.newUserAux.nombres.trim().toUpperCase() : '');
+    this.newUserAux.ape_pater = (this.newUserAux.ape_pater != null ? this.newUserAux.ape_pater.trim().toUpperCase() : '');
+    this.newUserAux.ape_mater = (this.newUserAux.ape_mater != null ? this.newUserAux.ape_mater.trim().toUpperCase() : '');
+    this.newUserAux.run = (this.newUserAux.run != null ? this.newUserAux.run.trim().toUpperCase() : '');
+
+  }
 
 }
