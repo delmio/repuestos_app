@@ -6,6 +6,9 @@
               <ng-template pTemplate="left">
                   <button pButton pRipple label="Registrar Usuario" icon="pi pi-plus" class="p-button-success p-mr-2 p-mb-2" (click)="openDialogNewUser()"></button>
               </ng-template>
+              <ng-template pTemplate="right">
+                  <button pButton pRipple type="button" icon="pi pi-refresh" class="p-button-rounded p-mr-2 p-mb-2" (click)="getUsers()"></button>
+              </ng-template>
           </p-toolbar>
 
           <p-table #dt [value]="users" [columns]="columns" [rows]="6" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']"
@@ -38,7 +41,7 @@
                       </td>
                       <td><span class="p-column-title">Acciones</span>
                         <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning p-mr-2"></button>
-                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"></button>
+                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click) = "updateUserStatus(users)"></button>
                       </td>
                   </tr>
               </ng-template>

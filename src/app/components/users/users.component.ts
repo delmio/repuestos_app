@@ -37,23 +37,15 @@ export class UsersComponent implements OnInit {
   async getUsers(){
     this._userService.get('GET_USERS').toPromise()
     .then((r)=>{
-
         if(r.ok){
-
             this.users = r.result;
-
         }else{
-
             console.log(r.error);
             this.messageService.add({ key: 'tst', severity: 'error', summary: '¡Error!', detail: 'Se genero un error al cargar los usuarios' });
-        }
-
-
+        };
     }).catch((err)=>{
-
         console.log(err);
         this.messageService.add({ key: 'tst', severity: 'error', summary: '¡Error!', detail: 'Se genero un error al cargar los usuarios' });
-
     });
   }
 
@@ -145,6 +137,22 @@ export class UsersComponent implements OnInit {
     this.newUserAux.ape_mater = (this.newUserAux.ape_mater != null ? this.newUserAux.ape_mater.trim().toUpperCase() : '');
     this.newUserAux.run = (this.newUserAux.run != null ? this.newUserAux.run.trim().toUpperCase() : '');
 
+  }
+
+  updateUserStatus(updatedUser: Users){
+      updatedUser.activo = !updatedUser.activo;
+      this._userService.put('PUT_USERS',updatedUser).toPromise()
+        .then((r:any)=>{
+              if(r?.ok){
+                this.messageService.add({ key: 'tst', severity: 'success', summary: '¡Aviso!', detail: 'Se Actualizo el usuario correctamente.' });
+              }else{
+                console.log(r.error);
+                this.messageService.add({ key: 'tst', severity: 'error', summary: '¡Error!', detail: 'Se genero un error al actualizar el usuario' });
+              }
+        }).catch((err)=>{
+          console.log(err);
+          this.messageService.add({ key: 'tst', severity: 'error', summary: '¡Error!', detail: 'Se genero un error al actualizar el nuevo usuario' });
+      });
   }
 
 }

@@ -6,6 +6,7 @@ import { environment } from "src/environments/environment";
 const Endpoints = { 
   GET_USERS:`${environment.repuestosAPI}users`,
   POST_USERS:`${environment.repuestosAPI}users`,
+  PUT_USERS:`${environment.repuestosAPI}users`,
 
 }
 
@@ -22,6 +23,10 @@ get<R>(endpoint:Endpoint, headers = null, params = null): Observable<any> {
 
 post<B,R>(endpoint:Endpoint, body: B = {} as B, headers = null): Observable<R> {
   return this._http.post<R>(Endpoints[endpoint], body, { headers: headers });
+}
+
+put<A,Z>(endpoint:Endpoint, body: A = {} as A, headers = null): Observable<Z>{
+  return this._http.put<Z>(Endpoints[endpoint], body, { headers: headers })
 }
 
 }
